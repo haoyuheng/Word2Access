@@ -1,0 +1,17 @@
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Debug\Word2Access.exe.config
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Debug\Word2Access.exe
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Debug\Word2Access.pdb
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Debug\Word2Access.csprojResolveAssemblyReference.cache
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Debug\Word2Access.Form1.resources
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Debug\Word2Access.Properties.Resources.resources
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Debug\Word2Access.csproj.GenerateResource.Cache
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Debug\Word2Access.exe
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Debug\Word2Access.pdb
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Debug\Spire.Doc.dll
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Debug\Spire.Doc.xml
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Debug\Spire.Pdf.dll
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Debug\Spire.License.dll
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Debug\Microsoft.mshtml.dll
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Debug\Spire.License.xml
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Debug\Interop.ADOX.dll
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Debug\Word2Access.csproj.ResolveComReference.cache
