@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("所有数据表");
             this.TabPage = new System.Windows.Forms.TabControl();
             this.ManagerPage = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -50,18 +51,31 @@
             this.TableList = new System.Windows.Forms.ListView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.ImportWordBox = new System.Windows.Forms.GroupBox();
+            this.Tips = new System.Windows.Forms.Label();
+            this.ImportButton = new System.Windows.Forms.Button();
             this.ImportLog = new System.Windows.Forms.TextBox();
             this.WordFilePath = new System.Windows.Forms.TextBox();
             this.ChooseWordFileButton = new System.Windows.Forms.Button();
             this.SerachPage = new System.Windows.Forms.TabPage();
-            this.ImportButton = new System.Windows.Forms.Button();
-            this.Tips = new System.Windows.Forms.Label();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.SearchButton = new System.Windows.Forms.PictureBox();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.TableTree = new System.Windows.Forms.TreeView();
+            this.imageList2 = new System.Windows.Forms.ImageList(this.components);
+            this.ResultList = new System.Windows.Forms.ListView();
+            this.DeleteTableButton = new System.Windows.Forms.Button();
             this.TabPage.SuspendLayout();
             this.ManagerPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.TableDetail.SuspendLayout();
             this.TableManagerBox.SuspendLayout();
             this.ImportWordBox.SuspendLayout();
+            this.SerachPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SearchButton)).BeginInit();
             this.SuspendLayout();
             // 
             // TabPage
@@ -162,6 +176,7 @@
             this.TableDetail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TableDetail.BackColor = System.Drawing.Color.BlanchedAlmond;
+            this.TableDetail.Controls.Add(this.DeleteTableButton);
             this.TableDetail.Controls.Add(this.MatchListBox);
             this.TableDetail.Controls.Add(this.Addmatch);
             this.TableDetail.Controls.Add(this.MatchContent);
@@ -221,7 +236,7 @@
             this.ColumBox.ItemHeight = 20;
             this.ColumBox.Location = new System.Drawing.Point(22, 69);
             this.ColumBox.Name = "ColumBox";
-            this.ColumBox.Size = new System.Drawing.Size(151, 264);
+            this.ColumBox.Size = new System.Drawing.Size(151, 224);
             this.ColumBox.TabIndex = 1;
             this.ColumBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ColumBox_DrawItem);
             // 
@@ -284,6 +299,25 @@
             this.ImportWordBox.TabStop = false;
             this.ImportWordBox.Text = "ImportWordBox";
             // 
+            // Tips
+            // 
+            this.Tips.AutoSize = true;
+            this.Tips.Location = new System.Drawing.Point(29, 35);
+            this.Tips.Name = "Tips";
+            this.Tips.Size = new System.Drawing.Size(161, 14);
+            this.Tips.TabIndex = 4;
+            this.Tips.Text = "Tips :  当前匹配模式为";
+            // 
+            // ImportButton
+            // 
+            this.ImportButton.Location = new System.Drawing.Point(685, 72);
+            this.ImportButton.Name = "ImportButton";
+            this.ImportButton.Size = new System.Drawing.Size(87, 27);
+            this.ImportButton.TabIndex = 3;
+            this.ImportButton.Text = "导入";
+            this.ImportButton.UseVisualStyleBackColor = true;
+            this.ImportButton.Click += new System.EventHandler(this.ImportButton_Click);
+            // 
             // ImportLog
             // 
             this.ImportLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -317,6 +351,7 @@
             // 
             // SerachPage
             // 
+            this.SerachPage.Controls.Add(this.splitContainer1);
             this.SerachPage.Location = new System.Drawing.Point(4, 24);
             this.SerachPage.Name = "SerachPage";
             this.SerachPage.Padding = new System.Windows.Forms.Padding(3);
@@ -325,24 +360,92 @@
             this.SerachPage.Text = "Search";
             this.SerachPage.UseVisualStyleBackColor = true;
             // 
-            // ImportButton
+            // splitContainer1
             // 
-            this.ImportButton.Location = new System.Drawing.Point(685, 72);
-            this.ImportButton.Name = "ImportButton";
-            this.ImportButton.Size = new System.Drawing.Size(87, 27);
-            this.ImportButton.TabIndex = 3;
-            this.ImportButton.Text = "导入";
-            this.ImportButton.UseVisualStyleBackColor = true;
-            this.ImportButton.Click += new System.EventHandler(this.ImportButton_Click);
+            this.splitContainer1.BackColor = System.Drawing.Color.DimGray;
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer1.Name = "splitContainer1";
             // 
-            // Tips
+            // splitContainer1.Panel1
             // 
-            this.Tips.AutoSize = true;
-            this.Tips.Location = new System.Drawing.Point(29, 35);
-            this.Tips.Name = "Tips";
-            this.Tips.Size = new System.Drawing.Size(161, 14);
-            this.Tips.TabIndex = 4;
-            this.Tips.Text = "Tips :  当前匹配模式为";
+            this.splitContainer1.Panel1.BackColor = System.Drawing.Color.White;
+            this.splitContainer1.Panel1.Controls.Add(this.SearchButton);
+            this.splitContainer1.Panel1.Controls.Add(this.tableLayoutPanel2);
+            this.splitContainer1.Panel1.Controls.Add(this.TableTree);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.ResultList);
+            this.splitContainer1.Size = new System.Drawing.Size(1374, 623);
+            this.splitContainer1.SplitterDistance = 261;
+            this.splitContainer1.SplitterWidth = 3;
+            this.splitContainer1.TabIndex = 0;
+            // 
+            // SearchButton
+            // 
+            this.SearchButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.SearchButton.Image = ((System.Drawing.Image)(resources.GetObject("SearchButton.Image")));
+            this.SearchButton.Location = new System.Drawing.Point(0, 573);
+            this.SearchButton.Name = "SearchButton";
+            this.SearchButton.Size = new System.Drawing.Size(261, 50);
+            this.SearchButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.SearchButton.TabIndex = 1;
+            this.SearchButton.TabStop = false;
+            this.SearchButton.Click += new System.EventHandler(this.SearchButton_Click);
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel2.ColumnCount = 1;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 279);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(255, 288);
+            this.tableLayoutPanel2.TabIndex = 1;
+            // 
+            // TableTree
+            // 
+            this.TableTree.Dock = System.Windows.Forms.DockStyle.Top;
+            this.TableTree.ImageIndex = 0;
+            this.TableTree.ImageList = this.imageList2;
+            this.TableTree.Location = new System.Drawing.Point(0, 0);
+            this.TableTree.Name = "TableTree";
+            treeNode2.Name = "AllTable";
+            treeNode2.Text = "所有数据表";
+            this.TableTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode2});
+            this.TableTree.SelectedImageIndex = 0;
+            this.TableTree.Size = new System.Drawing.Size(261, 273);
+            this.TableTree.TabIndex = 0;
+            this.TableTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TableTree_NodeMouseDoubleClick);
+            // 
+            // imageList2
+            // 
+            this.imageList2.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList2.ImageStream")));
+            this.imageList2.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList2.Images.SetKeyName(0, "icon_favicon.png");
+            // 
+            // ResultList
+            // 
+            this.ResultList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ResultList.Location = new System.Drawing.Point(0, 0);
+            this.ResultList.Name = "ResultList";
+            this.ResultList.Size = new System.Drawing.Size(1110, 623);
+            this.ResultList.TabIndex = 0;
+            this.ResultList.UseCompatibleStateImageBehavior = false;
+            // 
+            // DeleteTableButton
+            // 
+            this.DeleteTableButton.Location = new System.Drawing.Point(23, 299);
+            this.DeleteTableButton.Name = "DeleteTableButton";
+            this.DeleteTableButton.Size = new System.Drawing.Size(150, 36);
+            this.DeleteTableButton.TabIndex = 7;
+            this.DeleteTableButton.Text = "删除数据表";
+            this.DeleteTableButton.UseVisualStyleBackColor = true;
+            this.DeleteTableButton.Click += new System.EventHandler(this.DeleteTableButton_Click);
             // 
             // Form1
             // 
@@ -362,6 +465,12 @@
             this.TableManagerBox.ResumeLayout(false);
             this.ImportWordBox.ResumeLayout(false);
             this.ImportWordBox.PerformLayout();
+            this.SerachPage.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.SearchButton)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -394,6 +503,13 @@
         private System.Windows.Forms.ListBox MatchListBox;
         private System.Windows.Forms.Button ImportButton;
         private System.Windows.Forms.Label Tips;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.TreeView TableTree;
+        private System.Windows.Forms.ImageList imageList2;
+        private System.Windows.Forms.ListView ResultList;
+        private System.Windows.Forms.PictureBox SearchButton;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Button DeleteTableButton;
     }
 }
 

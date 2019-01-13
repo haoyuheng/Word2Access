@@ -136,6 +136,55 @@ namespace Word2Access
             return i > 0;
         }
 
+        internal List<string> GetImportFileList(string tablename)
+        {
+            List<string> importfilelist = new List<string>();
+            //SELECT importfilename FROM 测试 group by importfilename;
+            string sql = "SELECT importfilename FROM " + tablename + " group by importfilename";
+            OleDbDataAdapter dbDataAdapter = new OleDbDataAdapter(sql, oleDb);
+            DataTable dt = new DataTable(); //新建表对象
+            dbDataAdapter.Fill(dt); //用适配对象填充表对象
+            foreach (DataRow item in dt.Rows)
+            {
+                importfilelist.Add(item[0].ToString());
+            }
+            return importfilelist;
+        }
 
+        internal DataTable getSearchData(string tablename, string importfilename)
+        {
+            string sql = "SELECT * FROM " + tablename + " where importfilename = '"+importfilename+"'";
+            
+            OleDbDataAdapter dbDataAdapter = new OleDbDataAdapter(sql, oleDb);
+            DataTable dt = new DataTable();
+            dbDataAdapter.Fill(dt);
+            return dt;
+        }
+
+        internal DataTable getSearchData(string tablename)
+        {
+            string sql = "SELECT * FROM " + tablename;
+
+            OleDbDataAdapter dbDataAdapter = new OleDbDataAdapter(sql, oleDb);
+            DataTable dt = new DataTable();
+            dbDataAdapter.Fill(dt);
+            return dt;
+        }
+
+        internal DataTable getSearchDataBydql(string sql)
+        {
+            OleDbDataAdapter dbDataAdapter = new OleDbDataAdapter(sql, oleDb);
+            DataTable dt = new DataTable();
+            dbDataAdapter.Fill(dt);
+            return dt;
+        }
+
+        internal bool DelTable(string tablename)
+        {
+            string sql = "drop table " + tablename;
+            OleDbCommand oleDbCommand = new OleDbCommand(sql, oleDb);
+            int i = oleDbCommand.ExecuteNonQuery();
+            return i >= 0;
+        }
     }
 }

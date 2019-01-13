@@ -22,7 +22,9 @@ namespace Word2Access
             InitializeComponent();
             initDataSet();
             freshTableList();
+            freshTableTree();
         }
+
 
         private void initDataSet()
         {
@@ -34,8 +36,8 @@ namespace Word2Access
             MyDataSet = new Access();
         }
 
-       
-                
+
+
 
         private void CreatetableButton_Click(object sender, EventArgs e)
         {
@@ -63,36 +65,37 @@ namespace Word2Access
                 return;
             }
 
-            freshCreateTable();          
-            
+            freshCreateTable();
+
             string[] mycolums = columnames.Split(',');
 
             string s = "表名为：" + mytablename + "\r\n包含字段有： ";
-            for (int i = 0; i < mycolums.Length; i++) s += (i+1) + " : " + mycolums[i] + ",    ";
+            for (int i = 0; i < mycolums.Length; i++) s += (i + 1) + " : " + mycolums[i] + ",    ";
             s += "是否确认建表？";
             DialogResult result = MessageBox.Show(s, "确认健表", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             if (result == DialogResult.OK)
             {
-                ADOX.Column[] columns = new ADOX.Column[mycolums.Length + 1];
+                ADOX.Column[] columns = new ADOX.Column[mycolums.Length + 2];
                 columns[0] = new ADOX.Column() { Name = "id", Type = DataTypeEnum.adInteger, DefinedSize = 9 };
 
                 for (int i = 0; i < mycolums.Length; i++)
                 {
                     columns[i + 1] = new ADOX.Column() { Name = mycolums[i], Type = DataTypeEnum.adLongVarWChar, DefinedSize = 500 };
                 }
-
+                columns[mycolums.Length + 1] = new ADOX.Column() { Name = "importfilename", Type = DataTypeEnum.adLongVarWChar, DefinedSize = 500 };
                 bool flag = AccessDbHelper.CreateAccessTable(System.Environment.CurrentDirectory + "\\All.mdb", mytablename, columns);
                 if (flag)
                 {
                     MessageBox.Show("建表成功");
                     CreatemMatchFile(mytablename);
                     freshTableList();
+                    freshTableTree();
                 }
                 else MessageBox.Show("建表失败");
 
             }
 
-            
+
         }
 
         private void freshCreateTable()
@@ -110,7 +113,7 @@ namespace Word2Access
             MyDataSet.Reconnect();
             TableList.BeginUpdate();
             List<string> tablenamelist = MyDataSet.GetTableNameList();
-            for(int i = 0;i< tablenamelist.Count; i++)
+            for (int i = 0; i < tablenamelist.Count; i++)
             {
                 ListViewItem item = new ListViewItem();
                 item.Text = tablenamelist[i];
@@ -128,17 +131,19 @@ namespace Word2Access
                 TableDetail.Text = TableList.SelectedItems[0].Text;
                 CreatemMatchFile(TableDetail.Text);
                 String[] cloumnames = MyDataSet.GetTableColumn(TableList.SelectedItems[0].Text);
-                for(int i=0;i< cloumnames.Length; i++)
+                for (int i = 0; i < cloumnames.Length; i++)
                 {
-                    if (cloumnames[i] != "id")
+                    if (cloumnames[i] != "id" && cloumnames[i] != "importfilename")
                         ColumBox.Items.Add(cloumnames[i]);
                 }
                 readMatchFile(TableDetail.Text);
             }
-            
+
         }
-        
-        private void CreatemMatchFile( string tablename)
+
+
+
+        private void CreatemMatchFile(string tablename)
         {
             string path = System.Environment.CurrentDirectory + "\\match\\" + tablename + ".match";
             if (!File.Exists(path))
@@ -160,7 +165,7 @@ namespace Word2Access
                 MatchListBox.Items.Add(line);
             }
             if (MatchListBox.Items.Count > 0) MatchListBox.SelectedIndex = 0;
-            else Tips.Text = "Tips :  无匹配模式，请先添加匹配" ;
+            else Tips.Text = "Tips :  无匹配模式，请先添加匹配";
             sr.Close();
         }
 
@@ -191,13 +196,13 @@ namespace Word2Access
             {
                 MessageBox.Show("格式错误");
             }
-            
+
             //清空缓冲区
             sw.Flush();
             //关闭流
             sw.Close();
             fs.Close();
-            
+
         }
 
         private bool checkmatchline(string text)
@@ -239,9 +244,10 @@ namespace Word2Access
         {
             ImportLog.Clear();
             String filename = WordFilePath.Text;
-            if(string.IsNullOrWhiteSpace(filename)){
+            if (string.IsNullOrWhiteSpace(filename))
+            {
                 MessageBox.Show("请先选择导入文件");
-                return; 
+                return;
             }
 
             //载入Word文档
@@ -249,18 +255,20 @@ namespace Word2Access
 
             Section section = document.Sections[0];
             int i = 1;
-            foreach (Spire.Doc.Table table in section.Tables) {
-                ImportLog.AppendText("导入表格"+ i +"，自动查找匹配模式开始...\r\n"); 
+            foreach (Spire.Doc.Table table in section.Tables)
+            {
+                ImportLog.AppendText("导入表格" + i + "，自动查找匹配模式开始...\r\n");
                 string[] cls = getDocColumsFromDocTable(table);
                 int matchindex = getMatchIndex(cls);
-                if (matchindex < 0) {
+                if (matchindex < 0)
+                {
                     ImportLog.AppendText("查找匹配模式失败，请添加合适的匹配模式\r\n");
                 }
                 else
                 {
-                    ImportLog.AppendText("查找匹配模式成功，匹配模式为："+ MatchListBox.Items[matchindex].ToString() + "\r\n");
-                    
-                    ImportTableData(matchindex,table);
+                    ImportLog.AppendText("查找匹配模式成功，匹配模式为：" + MatchListBox.Items[matchindex].ToString() + "\r\n");
+
+                    ImportTableData(matchindex, table);
                 }
                 i++;
             }
@@ -292,17 +300,17 @@ namespace Word2Access
             string[] insertsql = new string[ColumBox.Items.Count];
             for (int i = 0; i < ColumBox.Items.Count - 1; i++)
             {
-                insertsql[i] =  "''";
+                insertsql[i] = "''";
             }
             string[] cls = getDocColumsFromDocTable(table);
             List<int> AccesscolumsIndex = getAccesscolumsIndex(matchindex, cls);
-            
 
-            for (int i =1; i < table.Rows.Count; i++)
+            string shortFileName = WordFilePath.Text.Substring(WordFilePath.Text.LastIndexOf('\\') + 1);
+            for (int i = 1; i < table.Rows.Count; i++)
             {
                 string strInsert = strInsertHead;
 
-                for (int j= 0;j< AccesscolumsIndex.Count;j++) 
+                for (int j = 0; j < AccesscolumsIndex.Count; j++)
                 {
                     if (AccesscolumsIndex[j] >= 0)
                     {
@@ -312,21 +320,22 @@ namespace Word2Access
                             cellcontent += paragraph.Text + " ";
                         }
 
-                        insertsql[AccesscolumsIndex[j]] = "'" +cellcontent.Trim()+"'";
-                    }                 
-                 }
-                for (int k = 0; k < ColumBox.Items.Count - 1;k++)
+                        insertsql[AccesscolumsIndex[j]] = "'" + cellcontent.Trim() + "'";
+                    }
+                }
+                for (int k = 0; k < ColumBox.Items.Count; k++)
                 {
                     strInsert += insertsql[k] + ",";
                 }
-                strInsert += insertsql[ColumBox.Items.Count - 1] + " )";
+
+                strInsert += "'" + shortFileName + "' )";
 
                 bool flag = MyDataSet.Add(strInsert);
-                if(flag)ImportLog.AppendText("导入第"+i+"条数据成功,"+strInsert+"\r\n");
+                if (flag) ImportLog.AppendText("导入第" + i + "条数据成功," + strInsert + "\r\n");
                 else ImportLog.AppendText("导入第" + i + "条数据失败," + strInsert + "\r\n");
             }
 
-            
+
 
         }
 
@@ -347,25 +356,27 @@ namespace Word2Access
             string s = " INSERT INTO " + TableDetail.Text;// + " ( bookid , booktitle , bookauthor , bookprice , bookstock ) VALUES ( ";
             s += " ( ";
             int i = 0;
-            for(i =0;i< ColumBox.Items.Count - 1 ; i++)
+            for (i = 0; i < ColumBox.Items.Count; i++)
             {
                 s += ColumBox.Items[i].ToString() + " , ";
             }
-            s += ColumBox.Items[ColumBox.Items.Count - 1].ToString() + " ) VALUES(";
-                       
+            s += "importfilename ) VALUES(";
+
             return s;
         }
 
         private int getMatchIndex(string[] cls)
         {
             int maxMatch = 0, mathindex = -1;
-            for (int i = 0; i < MatchListBox.Items.Count; i++) {
+            for (int i = 0; i < MatchListBox.Items.Count; i++)
+            {
                 int tmpMatch = ComputeMatch(cls, MatchListBox.Items[i].ToString());
-                if (tmpMatch > maxMatch) {
+                if (tmpMatch > maxMatch)
+                {
                     maxMatch = tmpMatch;
                     mathindex = i;
-                }                         
-            }           
+                }
+            }
             return mathindex;
         }
 
@@ -373,16 +384,17 @@ namespace Word2Access
         {
             int matchsize = 0;
             string[] vv = v.Split(',');
-            
-            for (int i = 0; i < cls.Length; i++) {
+
+            for (int i = 0; i < cls.Length; i++)
+            {
                 if (vv.Contains(cls[i]))
                 {
                     matchsize++;
                 }
-                   
+
             }
             int emptysize = 0;
-            for(int j =0;j < vv.Length; j++)
+            for (int j = 0; j < vv.Length; j++)
             {
                 if (vv[j] == "")
                     emptysize++;
@@ -401,7 +413,7 @@ namespace Word2Access
             e.DrawBackground();
             e.DrawFocusRectangle();
             e.Graphics.DrawString(ColumBox.Items[e.Index].ToString(), e.Font, new SolidBrush(Color.Black), e.Bounds);
-            
+
         }
 
         private void MatchListBox_DrawItem(object sender, DrawItemEventArgs e)
@@ -421,12 +433,200 @@ namespace Word2Access
 
             //遍历表格中的段落并提取文本
             string[] cls = new string[table.Rows[0].Cells.Count];
-            for (int i = 0;i< table.Rows[0].Cells.Count;i++)
+            for (int i = 0; i < table.Rows[0].Cells.Count; i++)
             {
                 cls[i] = table.Rows[0].Cells[i].Paragraphs[0].Text;
-                
+
             }
             return cls;
+        }
+
+
+        private void freshTableTree()
+        {
+            TableTree.Nodes.Clear();
+            List<string> tablenamelist = MyDataSet.GetTableNameList();
+            TreeNode rootnode = new TreeNode();
+            rootnode.Text = "所有数据表";
+            for (int i = 0; i < tablenamelist.Count; i++)
+            {
+                TreeNode tablenode = new TreeNode();
+                tablenode.Text = tablenamelist[i];
+                List<string> importfilelist = MyDataSet.GetImportFileList(tablenamelist[i]);
+                for (int j = 0; j < importfilelist.Count; j++)
+                {
+                    TreeNode importfilenode = new TreeNode();
+                    importfilenode.Text = importfilelist[j];
+                    tablenode.Nodes.Add(importfilenode);
+                }
+                rootnode.Nodes.Add(tablenode);
+            }
+            TableTree.Nodes.Add(rootnode);
+            rootnode.ExpandAll();
+        }
+
+        private void TableTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            TreeNode selectnode = e.Node;
+            string tablename = "", importfilename = "";
+            if (selectnode.Level == 0) return;
+            else if(selectnode.Level == 1)
+            {
+                tablename = selectnode.Text;
+                DataTable searchdata = MyDataSet.getSearchData(tablename);
+                dataTableToListview(searchdata, ResultList);
+            }
+            else if(selectnode.Level == 2)
+            {
+                importfilename = selectnode.Text;
+                tablename = selectnode.Parent.Text;
+                DataTable searchdata = MyDataSet.getSearchData(tablename, importfilename);
+                dataTableToListview(searchdata, ResultList);
+            }
+            freshSearchTableLayOutPanel(tablename);
+            
+            
+        }
+
+        private void freshSearchTableLayOutPanel(string tablename)
+        {
+            string[] colums = MyDataSet.GetTableColumn(tablename);
+            tableLayoutPanel2.Controls.Clear();
+            tableLayoutPanel2.ColumnCount = 1;
+            tableLayoutPanel2.RowCount = 0;
+            for (int i = 0;i< colums.Length ; i++)
+            {
+                if (colums[i] != "id" && colums[i] != "importfilename")
+                {
+                    tableLayoutPanel2.RowCount = tableLayoutPanel2.RowCount = 2;
+                    Label label1 = new Label();
+                    label1.Text = colums[i];
+                    label1.Width = 250;
+                    label1.TextAlign = ContentAlignment.BottomLeft;
+                    tableLayoutPanel2.Controls.Add(label1);
+                    System.Windows.Forms.TextBox tb = new System.Windows.Forms.TextBox();
+                    tb.Width = tableLayoutPanel2.Width - 10;
+                    tableLayoutPanel2.Controls.Add(tb);
+                }
+
+            }
+
+        }
+
+        /// <summary>
+        /// 为ListView绑定DataTable数据项
+        /// </summary>
+        /// <param name="dt">DataTable</param>
+        /// <param name="lv">ListView控件</param>
+        static public void dataTableToListview(DataTable dt, ListView lv)
+        {
+            if (dt != null)
+            {
+                lv.View = System.Windows.Forms.View.Details;
+                lv.GridLines = true;//显示网格线
+                lv.Items.Clear();//所有的项
+                lv.Columns.Clear();//标题
+                for (int i = 0; i < dt.Columns.Count; i++)
+                {
+                    lv.Columns.Add(dt.Columns[i].Caption.ToString());//增加标题
+                }
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    ListViewItem lvi = new ListViewItem(dt.Rows[i][0].ToString());
+                    for (int j = 1; j < dt.Columns.Count; j++)
+                    {
+                        // lvi.ImageIndex = 0;
+                        if(dt.Columns[j].Caption.ToString() == "字段4")
+                        {
+                            string[] s = dt.Rows[i][j].ToString().Split(' ');
+                            string ss = "";
+                            int index = 1;
+                            for (int k = 0; k < s.Length; k++) {
+                                if (!string.IsNullOrEmpty(s[k]))
+                                {
+                                    ss += s[k] + "(" + index + ") ";
+                                    index++;
+                                }
+                            }
+                            lvi.SubItems.Add(ss);
+                        }
+                        else
+                            lvi.SubItems.Add(dt.Rows[i][j].ToString());
+                    }
+                    lv.Items.Add(lvi);
+                }
+                lv.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);//调整列的宽度
+            }
+        }
+
+        private void SearchButton_Click(object sender, EventArgs e)
+        {
+            string sql = "select * from ";
+            string searchsql = getSearchsql();
+            string tablename = "", importfilename = "";
+            if (string.IsNullOrEmpty(searchsql)) return;
+            else {
+                if (TableTree.SelectedNode.Level == 1)
+                {
+                    tablename = TableTree.SelectedNode.Text;
+                    sql += tablename + " " + searchsql + " id > 0";
+                    DataTable searchdata = MyDataSet.getSearchDataBydql(sql);
+                    dataTableToListview(searchdata, ResultList);
+                }
+                else if (TableTree.SelectedNode.Level == 2)
+                {
+                    importfilename = TableTree.SelectedNode.Text;
+                    tablename = TableTree.SelectedNode.Parent.Text;
+                    sql += tablename + " " + searchsql + " importfilename = '"+ importfilename + "'";
+                    DataTable searchdata = MyDataSet.getSearchDataBydql(sql);
+                    dataTableToListview(searchdata, ResultList);
+                }
+                
+
+            }
+
+        }
+
+        private string getSearchsql()
+        {
+            string sql = "where ";
+            for(int i = 0; i< tableLayoutPanel2.Controls.Count; i = i+2)
+            {
+                Label lb = (Label)tableLayoutPanel2.Controls[i];
+                System.Windows.Forms.TextBox tb = (System.Windows.Forms.TextBox)tableLayoutPanel2.Controls[i+1];
+                if (tb.Text != "") {
+                    sql += lb.Text + " LIKE '%" + tb.Text + "%' and ";
+                }
+            }
+            if(sql == " where ") return null;
+            return sql;
+        }
+
+        private void DeleteTableButton_Click(object sender, EventArgs e)
+        {
+            string tablename = TableDetail.Text;
+            DialogResult result = MessageBox.Show("确认删除表"+tablename+"吗？", "确认删除吗", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (result == DialogResult.OK)
+            {
+                bool flag = MyDataSet.DelTable(tablename);
+                if (flag)
+                {
+                    MessageBox.Show("数据表" + tablename + "已删除");
+                    ColumBox.Items.Clear();
+                    MatchListBox.Items.Clear();
+                    // 返回与指定虚拟路径相对应的物理路径即绝对路径
+                    string path = System.Environment.CurrentDirectory + "\\match\\" + tablename + ".match";
+                    // 删除该文件
+                    System.IO.File.Delete(path);
+                    freshTableList();
+                    freshTableTree();
+                }
+                else
+                {
+                    MessageBox.Show("数据表" + tablename + "删除失败");
+                }
+            }
+
         }
     }
 }
