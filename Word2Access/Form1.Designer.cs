@@ -41,6 +41,7 @@
             this.TableName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.TableDetail = new System.Windows.Forms.GroupBox();
+            this.DeleteTableButton = new System.Windows.Forms.Button();
             this.MatchListBox = new System.Windows.Forms.ListBox();
             this.Addmatch = new System.Windows.Forms.Button();
             this.MatchContent = new System.Windows.Forms.TextBox();
@@ -62,8 +63,10 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.TableTree = new System.Windows.Forms.TreeView();
             this.imageList2 = new System.Windows.Forms.ImageList(this.components);
+            this.Export2Word = new System.Windows.Forms.PictureBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.ResultList = new System.Windows.Forms.ListView();
-            this.DeleteTableButton = new System.Windows.Forms.Button();
+            this.saveWordFile = new System.Windows.Forms.SaveFileDialog();
             this.TabPage.SuspendLayout();
             this.ManagerPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -76,6 +79,7 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SearchButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Export2Word)).BeginInit();
             this.SuspendLayout();
             // 
             // TabPage
@@ -189,6 +193,16 @@
             this.TableDetail.TabIndex = 2;
             this.TableDetail.TabStop = false;
             this.TableDetail.Text = "TableDetail";
+            // 
+            // DeleteTableButton
+            // 
+            this.DeleteTableButton.Location = new System.Drawing.Point(23, 299);
+            this.DeleteTableButton.Name = "DeleteTableButton";
+            this.DeleteTableButton.Size = new System.Drawing.Size(150, 36);
+            this.DeleteTableButton.TabIndex = 7;
+            this.DeleteTableButton.Text = "删除数据表";
+            this.DeleteTableButton.UseVisualStyleBackColor = true;
+            this.DeleteTableButton.Click += new System.EventHandler(this.DeleteTableButton_Click);
             // 
             // MatchListBox
             // 
@@ -376,6 +390,9 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.BackColor = System.Drawing.Color.White;
+            this.splitContainer1.Panel2.Controls.Add(this.Export2Word);
+            this.splitContainer1.Panel2.Controls.Add(this.label3);
             this.splitContainer1.Panel2.Controls.Add(this.ResultList);
             this.splitContainer1.Size = new System.Drawing.Size(1374, 623);
             this.splitContainer1.SplitterDistance = 261;
@@ -408,6 +425,7 @@
             // 
             // TableTree
             // 
+            this.TableTree.BackColor = System.Drawing.Color.AntiqueWhite;
             this.TableTree.Dock = System.Windows.Forms.DockStyle.Top;
             this.TableTree.ImageIndex = 0;
             this.TableTree.ImageList = this.imageList2;
@@ -428,24 +446,44 @@
             this.imageList2.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList2.Images.SetKeyName(0, "icon_favicon.png");
             // 
+            // Export2Word
+            // 
+            this.Export2Word.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Export2Word.Image = ((System.Drawing.Image)(resources.GetObject("Export2Word.Image")));
+            this.Export2Word.Location = new System.Drawing.Point(909, 3);
+            this.Export2Word.Name = "Export2Word";
+            this.Export2Word.Size = new System.Drawing.Size(197, 50);
+            this.Export2Word.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Export2Word.TabIndex = 2;
+            this.Export2Word.TabStop = false;
+            this.Export2Word.Click += new System.EventHandler(this.Export2Word_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label3.Font = new System.Drawing.Font("华文楷体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label3.Location = new System.Drawing.Point(216, 19);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(133, 21);
+            this.label3.TabIndex = 1;
+            this.label3.Text = "查询到0条记录";
+            // 
             // ResultList
             // 
-            this.ResultList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ResultList.Location = new System.Drawing.Point(0, 0);
+            this.ResultList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ResultList.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.ResultList.Location = new System.Drawing.Point(0, 56);
             this.ResultList.Name = "ResultList";
-            this.ResultList.Size = new System.Drawing.Size(1110, 623);
+            this.ResultList.Size = new System.Drawing.Size(1111, 567);
             this.ResultList.TabIndex = 0;
             this.ResultList.UseCompatibleStateImageBehavior = false;
             // 
-            // DeleteTableButton
+            // saveWordFile
             // 
-            this.DeleteTableButton.Location = new System.Drawing.Point(23, 299);
-            this.DeleteTableButton.Name = "DeleteTableButton";
-            this.DeleteTableButton.Size = new System.Drawing.Size(150, 36);
-            this.DeleteTableButton.TabIndex = 7;
-            this.DeleteTableButton.Text = "删除数据表";
-            this.DeleteTableButton.UseVisualStyleBackColor = true;
-            this.DeleteTableButton.Click += new System.EventHandler(this.DeleteTableButton_Click);
+            this.saveWordFile.DefaultExt = "*.docx";
             // 
             // Form1
             // 
@@ -454,8 +492,9 @@
             this.ClientSize = new System.Drawing.Size(1388, 657);
             this.Controls.Add(this.TabPage);
             this.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Word文档查询工具";
             this.TabPage.ResumeLayout(false);
             this.ManagerPage.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
@@ -468,9 +507,11 @@
             this.SerachPage.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SearchButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Export2Word)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -510,6 +551,9 @@
         private System.Windows.Forms.PictureBox SearchButton;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button DeleteTableButton;
+        private System.Windows.Forms.PictureBox Export2Word;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.SaveFileDialog saveWordFile;
     }
 }
 

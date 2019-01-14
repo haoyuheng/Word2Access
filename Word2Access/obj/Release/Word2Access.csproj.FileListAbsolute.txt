@@ -1,0 +1,12 @@
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Release\Interop.ADOX.dll
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Release\Word2Access.csproj.ResolveComReference.cache
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Release\Word2Access.exe
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Release\Word2Access.pdb
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Release\Spire.Doc.dll
+E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Release\Spire.Doc.xml
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Release\Word2Access.csprojResolveAssemblyReference.cache
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Release\Word2Access.Form1.resources
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Release\Word2Access.Properties.Resources.resources
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Release\Word2Access.csproj.GenerateResource.Cache
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Release\Word2Access.exe
+E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Release\Word2Access.pdb

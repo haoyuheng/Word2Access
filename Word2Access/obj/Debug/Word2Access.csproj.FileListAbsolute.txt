@@ -14,4 +14,3 @@ E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Debug\Microsoft.mshtm
 E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Debug\Spire.License.xml
 E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Debug\Interop.ADOX.dll
 E:\visual studio 2015\Projects\Word2Access\Word2Access\obj\Debug\Word2Access.csproj.ResolveComReference.cache
-E:\visual studio 2015\Projects\Word2Access\Word2Access\bin\Debug\C1.Win.C1FlexGrid.2.dll

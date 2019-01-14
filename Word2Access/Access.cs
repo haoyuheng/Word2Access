@@ -153,7 +153,7 @@ namespace Word2Access
 
         internal DataTable getSearchData(string tablename, string importfilename)
         {
-            string sql = "SELECT * FROM " + tablename + " where importfilename = '"+importfilename+"'";
+            string sql = "SELECT id, * FROM " + tablename + " where importfilename = '"+importfilename+"'";
             
             OleDbDataAdapter dbDataAdapter = new OleDbDataAdapter(sql, oleDb);
             DataTable dt = new DataTable();
@@ -163,7 +163,7 @@ namespace Word2Access
 
         internal DataTable getSearchData(string tablename)
         {
-            string sql = "SELECT * FROM " + tablename;
+            string sql = "SELECT id, * FROM " + tablename;
 
             OleDbDataAdapter dbDataAdapter = new OleDbDataAdapter(sql, oleDb);
             DataTable dt = new DataTable();

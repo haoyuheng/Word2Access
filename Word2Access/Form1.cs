@@ -34,6 +34,7 @@ namespace Word2Access
             else Console.WriteLine("already exits");
 
             MyDataSet = new Access();
+            TabPage.SelectedIndex = 1;
         }
 
 
@@ -158,7 +159,7 @@ namespace Word2Access
         {
             MatchListBox.Items.Clear();
             string path = System.Environment.CurrentDirectory + "\\match\\" + tablename + ".match";
-            StreamReader sr = new StreamReader(path, Encoding.Default);
+            StreamReader sr = new StreamReader(path, Encoding.UTF8);
             String line;
             while ((line = sr.ReadLine()) != null)
             {
@@ -332,10 +333,14 @@ namespace Word2Access
 
                 bool flag = MyDataSet.Add(strInsert);
                 if (flag) ImportLog.AppendText("导入第" + i + "条数据成功," + strInsert + "\r\n");
-                else ImportLog.AppendText("导入第" + i + "条数据失败," + strInsert + "\r\n");
+                else
+                {
+                    ImportLog.AppendText("导入第" + i + "条数据失败," + strInsert + "\r\n");
+
+                }
             }
-
-
+            ImportLog.AppendText("导入数据完成\r\n");
+            freshTableTree();
 
         }
 
@@ -518,7 +523,7 @@ namespace Word2Access
         /// </summary>
         /// <param name="dt">DataTable</param>
         /// <param name="lv">ListView控件</param>
-        static public void dataTableToListview(DataTable dt, ListView lv)
+        public void dataTableToListview(DataTable dt, ListView lv)
         {
             if (dt != null)
             {
@@ -530,9 +535,10 @@ namespace Word2Access
                 {
                     lv.Columns.Add(dt.Columns[i].Caption.ToString());//增加标题
                 }
+                this.label3.Text = "总共查询到：" + dt.Rows.Count + " 条记录。";
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    ListViewItem lvi = new ListViewItem(dt.Rows[i][0].ToString());
+                    ListViewItem lvi = new ListViewItem((i+1)+"");
                     for (int j = 1; j < dt.Columns.Count; j++)
                     {
                         // lvi.ImageIndex = 0;
@@ -559,9 +565,32 @@ namespace Word2Access
             }
         }
 
+        static public void listViewToDataTable(ListView lv, DataTable dt)
+        {
+            int i, j;
+            DataRow dr;
+            dt.Clear();
+            dt.Columns.Clear();
+            //生成DataTable列头
+            for (i = 0; i < lv.Columns.Count; i++)
+            {
+                dt.Columns.Add(lv.Columns[i].Text.Trim(), typeof(String));
+            }
+            //每行内容
+            for (i = 0; i < lv.Items.Count; i++)
+            {
+                dr = dt.NewRow();
+                for (j = 0; j < lv.Columns.Count; j++)
+                {
+                    dr[j] = lv.Items[i].SubItems[j].Text.Trim();
+                }
+                dt.Rows.Add(dr);
+            }
+        }
+
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            string sql = "select * from ";
+            string sql = "select id, * from ";
             string searchsql = getSearchsql();
             string tablename = "", importfilename = "";
             if (string.IsNullOrEmpty(searchsql)) return;
@@ -627,6 +656,70 @@ namespace Word2Access
                 }
             }
 
+        }
+
+        private void Export2Word_Click(object sender, EventArgs e)
+        {
+            if (ResultList.Items.Count <= 0)
+            {
+                MessageBox.Show("无导出数据");
+                return;
+            }
+            else
+            {
+                saveWordFile.Filter = "Word files (*.docx)|*.docx";
+                saveWordFile.RestoreDirectory = true;
+                if (saveWordFile.ShowDialog() == DialogResult.OK)
+                {
+                    saveMyWordFile(saveWordFile.FileName);
+                }
+            }
+        }
+
+        private void saveMyWordFile(string filename)
+        {
+            DataTable dt = new DataTable();
+            listViewToDataTable(ResultList, dt);
+
+
+            Document document = new Document();
+            Section section = document.AddSection();
+            
+            Spire.Doc.Table table = section.AddTable(true);
+
+            if (dt != null)
+            {
+                table.ResetCells(dt.Rows.Count + 1, dt.Columns.Count);
+                TableRow row = table.Rows[0];
+                row.IsHeader = true;
+                row.HeightType = TableRowHeightType.Exactly;
+                row.RowFormat.BackColor = Color.Gray;
+
+                for (int i = 0; i < dt.Columns.Count; i++)
+                {
+                    Paragraph para = row.Cells[i].AddParagraph();
+                    TextRange TR = para.AppendText(dt.Columns[i].Caption.ToString());
+                    TR.CharacterFormat.FontName = "宋体";
+                    TR.CharacterFormat.FontSize = 14;
+                    TR.CharacterFormat.Bold = true;
+
+                }
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    TableRow row1 = table.Rows[i + 1];
+                    for (int j = 0; j < dt.Columns.Count; j++)
+                    {
+                        Paragraph para = row1.Cells[j].AddParagraph();
+                        TextRange TR = para.AppendText(dt.Rows[i][j].ToString());
+                        TR.CharacterFormat.FontName = "宋体";
+                        TR.CharacterFormat.FontSize = 12;
+                    }
+                }
+
+                document.SaveToFile(filename);
+
+                System.Diagnostics.Process.Start(filename);
+            }
         }
     }
 }
